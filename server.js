@@ -78,11 +78,13 @@ app.post('/convert/emf2svg', uploadFile.single(UPLOAD_FIELD.file), async functio
     try {
         console.log(req.file)
         const { file } = req
-        exec(`./libemf2svg/emf2svg-conv -i ${file.path} -o ${listPathSave.image}/${file.filename}.svg`, (error, stdout, stderr) => {
+        const output = `${listPathSave.image}/${file.filename}.svg`
+        exec(`./libemf2svg/emf2svg-conv -i ${file.path} -o ${output}`, (error, stdout, stderr) => {
             if (error) {
                 throw error
             }
-            res.send({ status: true })
+
+            res.send({ status: true, path: "http://127.0.0.1:7750" + output.split('/').slice(2).join('/') })
         });
 
     } catch (error) {
