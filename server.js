@@ -84,7 +84,7 @@ app.post('/convert/emf2svg', uploadFile.single(UPLOAD_FIELD.file), async functio
                 throw error
             }
 
-            res.send({ status: true, path: "http://127.0.0.1:7750" + output.split('/').slice(2).join('/') })
+            res.send({ status: true, path: "http://127.0.0.1:7750/" + output.split('/').slice(2).join('/') })
         });
 
     } catch (error) {
