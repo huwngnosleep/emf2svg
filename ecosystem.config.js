@@ -2,7 +2,7 @@
 module.exports = {
     apps: [
         {
-            name: "docx_converter",
+            name: "emf2svg",
             script: "server.js",
             autorestart: true,
             max_memory_restart: "4G",
