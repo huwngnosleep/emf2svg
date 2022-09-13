@@ -1,0 +1,3 @@
+[submodule "libemf2svg"]
+	path = libemf2svg
+	url = https://github.com/huwngnosleep/libemf2svg
