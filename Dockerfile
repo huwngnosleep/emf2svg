@@ -19,6 +19,6 @@ RUN cmake ./libemf2svg -DCMAKE_INSTALL_PREFIX=/usr/ \
     && make install
 
 # WORKDIR /app
-EXPOSE 7749
+# EXPOSE 7749
+RUN npm install -g pm2
 RUN npm install
-CMD ["npm", "start"]
