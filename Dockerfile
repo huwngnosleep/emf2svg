@@ -13,12 +13,10 @@ RUN apt-get install -y gcc g++ \
 WORKDIR /app
 COPY . .
 
-# WORKDIR /app/libemf2svg
-# RUN cmake . -DCMAKE_INSTALL_PREFIX=/usr/ \
-#     && make \
-#     && make install
+RUN cmake ./libemf2svg -DCMAKE_INSTALL_PREFIX=/usr/ \
+    && make \
+    && make install
 
-# WORKDIR /app
-# EXPOSE 7749
+RUN npm install
 RUN npm install -g pm2
-# RUN npm install
+CMD ["pm2-runtime", "ecosystem.config.js"]

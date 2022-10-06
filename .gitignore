@@ -2,3 +2,4 @@ node_modules/
 public/
 public/uploads/
 test.docx.tmp/
+.env
