@@ -79,7 +79,7 @@ app.post('/convert/emf2svg', uploadFile.single(UPLOAD_FIELD.file), async functio
         console.log(req.file)
         const { file } = req
         const output = `${listPathSave.image}/${file.filename}.svg`
-        exec(`./libemf2svg/emf2svg-conv -i ${file.path} -o ${output}`, (error, stdout, stderr) => {
+        exec(`./emf2svg-conv -i ${file.path} -o ${output}`, (error, stdout, stderr) => {
             if (error) {
                 throw error
             }
