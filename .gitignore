@@ -2,3 +2,7 @@ node_modules/
 public/
 public/uploads/
 test.docx.tmp/
+.env
+.env.dev
+.env.stag
+.env.prod

@@ -3,28 +3,24 @@ module.exports = {
     apps: [
         {
             name: "emf2svg",
-            script: "server.js",
+            script: 'npm',
+            args: 'start',
+            time: true,
+            exec_mode: 'fork', // need explicitly declare mode otherwise it will fallback to cluster mode and cause infinite reload
+            instances: 1,
             autorestart: true,
+            watch: false,
             max_memory_restart: "4G",
             // cron_restart: "0 5 * * *",
-            env: {
-                COMMON_VARIABLE: "true",
-                NODE_ENV: "local",
-                PORT: 7750,
-                BASE_URL: "http://127.0.0.1:7750",
-            },
-            env_development: {
-                COMMON_VARIABLE: "true",
-                NODE_ENV: "local",
-                PORT: 7750,
-                BASE_URL: "http://127.0.0.1:7750",
-            },
-            env_production: {
-                COMMON_VARIABLE: "true",
-                NODE_ENV: "local",
-                PORT: 7750,
-                BASE_URL: "http://127.0.0.1:7750",
-            },
+            // env: {
+            //     NODE_ENV: "local",
+            // },
+            // env_development: {
+            //     NODE_ENV: "local",
+            // },
+            // env_production: {
+            //     NODE_ENV: "local",
+            // },
         },
     ],
 };

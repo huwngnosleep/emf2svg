@@ -5,7 +5,8 @@ var cors = require('cors');
 const path = require('path')
 const fs = require('fs')
 const { exec } = require("child_process");
-var parseString = require('xml2js').parseString;
+const constants = require('./global/constants');
+
 const { uploadFile, UPLOAD_FIELD, getFileExtension, listAbsFilepath, listPathSave } = require('./uploadFile')
 app.use(function (req, res, next) {
     res.setHeader('Access-Control-Expose-Headers', 'Access-Control-*, Origin, X-Requested-With, Content-Type, Accept, Authorization');
@@ -35,44 +36,22 @@ app.use(
 );
 app.use(requestIp.mw());
 
-function getMathTag(xml, parsedMath = []) {
-    if (!xml) return parsedMath
-    const startIndex = xml.indexOf("<mml:math")
+app.get("/", async (req, res, next) => {
 
-    if (startIndex > -1) {
-        const endIndex = xml.indexOf("</mml:math>")
+    res.send({
+        status: true,
+        message: "service emf2svg is running",
+    });
+});
 
-        const math = xml.slice(startIndex, endIndex + 11)
-        parsedMath.push(math.replace(/mml:/g, ''))
-
-        getMathTag(xml.slice(endIndex + 11), parsedMath)
+app.get('/health', (req, res) => {
+    const data = {
+      uptime: process.uptime(),
+      message: 'Ok'
     }
-
-    return parsedMath
-}
-
-app.post('/convert', uploadFile.single(UPLOAD_FIELD.file), async function (req, res, next) {
-    try {
-        console.log(req.file)
-        const { file } = req
-        exec(`.\\calabash\\calabash.bat -o result=test.xml .\\docx2hub\\xpl\\docx2hub.xpl docx=${file.path}`, (error, stdout, stderr) => {
-            if (error) {
-                throw error
-            }
-
-            const savedPath = `${listPathSave.file}/${file.filename}.xml`
-            fs.readFile('test.xml', 'utf8', function (err, data) {
-                const maths = getMathTag(data)
-                console.log(maths)
-                res.send({ status: true, maths })
-            });
-
-        });
-
-    } catch (error) {
-        res.send({ status: false, message: "ERROR HAPPENED" })
-    }
-})
+  
+    res.status(200).send(data);
+});
 
 app.post('/convert/emf2svg', uploadFile.single(UPLOAD_FIELD.file), async function (req, res, next) {
     try {
@@ -84,7 +63,7 @@ app.post('/convert/emf2svg', uploadFile.single(UPLOAD_FIELD.file), async functio
                 throw error
             }
 
-            res.send({ status: true, path: "http://127.0.0.1:7750/" + output.split('/').slice(2).join('/') })
+            res.send({ status: true, path: constants.PATH_SVG + output.split('/').slice(2).join('/') })
         });
 
     } catch (error) {
@@ -92,16 +71,8 @@ app.post('/convert/emf2svg', uploadFile.single(UPLOAD_FIELD.file), async functio
     }
 })
 
-
-app.get("/", async (req, res, next) => {
-
-    res.send({
-        status: true,
-        message: "Docx convert worker is running",
-    });
-});
-
-const port = 7750
+const port = constants.PORT;
+console.log("ENVIRONMENT", constants.NODE_ENV)
 const server = require("http").createServer(app);
 server.listen(port);
-console.log(`server start on local: ${port}`);
+console.log(`server start on ${constants.BASE_URL}`);
